@@ -1,0 +1,22 @@
+name: Compile and run ATM.C
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ATM.C
+      - .github/workflows/atm.yml
+
+jobs:
+  run-atm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile as C and run an ATM session
+        run: |
+          gcc -std=c11 -Wall -Wextra -Werror -x c ATM.C -o atm
+          output=$(printf '1234\n1\n2\n100\n3\n50\n4\n' | ./atm)
+          printf '%s\n' "$output"
+          grep -F 'Your Balance: Rs. 5000.00' <<< "$output"
+          grep -F 'New Balance: Rs. 5100.00' <<< "$output"
+          grep -F 'Remaining Balance: Rs. 5050.00' <<< "$output"
