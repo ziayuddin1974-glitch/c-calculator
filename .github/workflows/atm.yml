@@ -6,6 +6,7 @@ on:
     paths:
       - ATM.C
       - calculator.c
+      - "STUDENT DATABASE APPLICATION.C"
       - .github/workflows/atm.yml
 
 jobs:
@@ -30,3 +31,13 @@ jobs:
           output=$(printf '5 / 0\n' | ./calculator)
           printf '%s\n' "$output"
           grep -F 'Division by zero!' <<< "$output"
+      - name: Compile and run student database application
+        run: |
+          gcc -std=c11 -Wall -Wextra -Werror -x c "STUDENT DATABASE APPLICATION.C" -o student-database
+          output=$(printf '1\n101\nAsha\n95.5\nDelhi\nEngineer\n' | ./student-database)
+          printf '%s\n' "$output"
+          grep -F 'Student roll number: 101' <<< "$output"
+          grep -F 'Name of student: Asha' <<< "$output"
+          grep -F 'Cutoff of student: 95.50' <<< "$output"
+          grep -F 'City of student: Delhi' <<< "$output"
+          grep -F 'Dream of student: Engineer' <<< "$output"
