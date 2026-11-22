@@ -1,10 +1,11 @@
-name: Compile and run ATM.C
+name: Compile and run C programs
 
 on:
   push:
     branches: [main]
     paths:
       - ATM.C
+      - calculator.c
       - .github/workflows/atm.yml
 
 jobs:
@@ -20,3 +21,12 @@ jobs:
           grep -F 'Your Balance: Rs. 5000.00' <<< "$output"
           grep -F 'New Balance: Rs. 5100.00' <<< "$output"
           grep -F 'Remaining Balance: Rs. 5050.00' <<< "$output"
+      - name: Compile and run calculator.c
+        run: |
+          gcc -std=c11 -Wall -Wextra -Werror -x c calculator.c -o calculator
+          output=$(printf '5 + 3\n' | ./calculator)
+          printf '%s\n' "$output"
+          grep -F '= 8.00' <<< "$output"
+          output=$(printf '5 / 0\n' | ./calculator)
+          printf '%s\n' "$output"
+          grep -F 'Division by zero!' <<< "$output"
