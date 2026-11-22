@@ -7,6 +7,7 @@ on:
       - ATM.C
       - calculator.c
       - "STUDENT DATABASE APPLICATION.C"
+      - "STUDENT GRADE CALCULATOR.C"
       - .github/workflows/atm.yml
 
 jobs:
@@ -41,3 +42,13 @@ jobs:
           grep -F 'Cutoff of student: 95.50' <<< "$output"
           grep -F 'City of student: Delhi' <<< "$output"
           grep -F 'Dream of student: Engineer' <<< "$output"
+      - name: Compile and run student grade calculator
+        run: |
+          gcc -std=c11 -Wall -Wextra -Werror -x c "STUDENT GRADE CALCULATOR.C" -o student-grade
+          output=$(./student-grade Asha 90 80 70 60 50)
+          printf '%s\n' "$output"
+          grep -F 'Student Name : Asha' <<< "$output"
+          grep -F 'Total        : 350' <<< "$output"
+          grep -F 'Average      : 70.00' <<< "$output"
+          grep -F 'Result       : PASS' <<< "$output"
+          grep -F 'Grade        : B' <<< "$output"
